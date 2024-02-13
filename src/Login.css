@@ -1,0 +1,13 @@
+
+  #image{
+    border: black 3px solid;
+    border-radius: 30px;
+    width: 300px;
+    height: auto; 
+    ;
+  }
+  #Parent-conatainer{
+    display: flex;
+    align-items: center;
+    
+  }
