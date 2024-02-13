@@ -10,22 +10,37 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const { setIsLoggedIn, setUserNickname } = useContext(AuthContext);
+  const {
+    userTkn,
+    setUserTkn,
+    userscore,
+    setUserScore,
+    userNickname,
+    setUserNickname,
+    isAuthenticated,
+    setIsAuthenticated,
+  } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(
         'http://localhost:8080/users/login',
-        { email, password },
-        { withCredentials: true }
+        { email, password }
+        // { withCredentials: true }
       );
-      if (res.data.ok) {
-        setIsLoggedIn(true);
+      if (res.data.token) {
+        setUserTkn(res.data.token);
+        setUserNickname(res.data.nickname);
+        setUserScore(res.data.score);
+        localStorage.setItem('Token', res.data.token);
+        localStorage.setItem('Nickname', res.data.nickname);
+        localStorage.setItem('Score', res.data.score);
+        setIsAuthenticated(true);
         navigate('/home');
       }
     } catch (err) {
-      console.log(err);
+      console.error('An error occurred during login:', err);
     }
   };
 

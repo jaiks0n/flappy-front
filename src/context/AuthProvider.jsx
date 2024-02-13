@@ -1,33 +1,34 @@
 import { createContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userNickname, setUserNickname] = useState('');
+  const [userTkn, setUserTkn] = useState(localStorage.getItem('Token') || '');
+  const [userNickname, setUserNickname] = useState(
+    localStorage.getItem('Nickname') || ''
+  );
+  const [userscore, setUserScore] = useState(
+    localStorage.getItem('Score') || ''
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    userTkn ? true : false
+  );
 
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const res = await axios.get('http://localhost:8080/users/check-status', { withCredentials: true });
-        console.log(res.data)
-        if (res.data.ok) {
-          navigate('/home')
-          setIsLoggedIn(true);
-        }
-      } catch (err) {
-        console.log(err);
-        setIsLoggedIn(false);
-      }
-    };
-
-    checkStatus();
-  }, [isLoggedIn]);
-
-  return <AuthContext.Provider value={{ setIsLoggedIn, isLoggedIn,userNickname,setUserNickname }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        userTkn,
+        setUserTkn,
+        userscore,
+        setUserScore,
+        userNickname,
+        setUserNickname,
+        isAuthenticated,
+        setIsAuthenticated,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

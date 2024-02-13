@@ -33,7 +33,6 @@ function Signup() {
       if (res.data.ok) {
         navigate('/');
       }
-      console.log(res.data);
     } catch (err) {
       console.log(err);
       
